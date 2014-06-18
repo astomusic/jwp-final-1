@@ -18,7 +18,7 @@ public class ShowController implements Controller {
 	private List<Answer> answers;
 	
 	@Override
-	public String execute(HttpServletRequest request,
+	public synchronized String execute(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		long questionId = Long.parseLong(request.getParameter("questionId"));
 		question = questionDao.findById(questionId);

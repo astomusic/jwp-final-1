@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import next.controller.AnswerController;
+import next.controller.ApiListController;
 import next.controller.ListController;
 import next.controller.SavaController;
 import next.controller.ShowController;
@@ -21,6 +22,7 @@ public class RequestMapping {
 		mappings.put("/form.next", new ForwardController("form.jsp"));
 		mappings.put("/save.next", new SavaController());
 		mappings.put("/api/addanswer.next", new AnswerController());
+		mappings.put("/api/list.next", new ApiListController());
 	
 		logger.info("Initialized Mapping Completed!");
 	}
