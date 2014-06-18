@@ -13,6 +13,16 @@
 		<listener-class>next.support.init.JwpContextLoaderListender</listener-class>
 	</listener>
 	
+	 <filter>
+        <filter-name>EncodeingFilter</filter-name>
+        <filter-class>core.web.filter.CharacterEncodingFilter</filter-class>
+     </filter>
+     
+     <filter-mapping>
+        <filter-name>EncodeingFilter</filter-name>
+        <url-pattern>*.next</url-pattern>
+     </filter-mapping>
+	
 	<servlet>
 		<display-name>FrontController</display-name>
 		<servlet-name>FrontController</servlet-name>

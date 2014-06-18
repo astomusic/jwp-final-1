@@ -37,6 +37,28 @@ public class QuestionDao {
 			}
 		}		
 	}
+	
+	public void updateCountOfComment(long questionId, int countOfComment) throws SQLException {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		try {
+			con = ConnectionManager.getConnection();
+			String sql = "UPDATE QUESTIONS SET countOfComment=? WHERE questionId = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, countOfComment);
+			pstmt.setLong(2, questionId);
+
+			pstmt.executeUpdate();
+		} finally {
+			if (pstmt != null) {
+				pstmt.close();
+			}
+
+			if (con != null) {
+				con.close();
+			}
+		}	
+	}
 
 	public List<Question> findAll() throws SQLException {
 		Connection con = null;
