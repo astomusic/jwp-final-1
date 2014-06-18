@@ -66,29 +66,39 @@ public class QuestionDao {
 		ResultSet rs = null;
 		try {
 			con = ConnectionManager.getConnection();
-			String sql = "SELECT questionId, writer, title, createdDate, countOfComment FROM QUESTIONS " + 
-					"order by questionId desc";
+			String sql = setQueryForAll();
 			pstmt = con.prepareStatement(sql);
 
 			rs = pstmt.executeQuery();
 
-			List<Question> questions = new ArrayList<Question>();
-			Question question = null;
-			while (rs.next()) {
-				question = new Question(
-						rs.getLong("questionId"),
-						rs.getString("writer"),
-						rs.getString("title"),
-						null,
-						rs.getTimestamp("createdDate"),
-						rs.getInt("countOfComment"));
-				questions.add(question);
-			}
+			List<Question> questions = getResultForAll(rs);
 
 			return questions;
 		} finally {
 			closeResource(con, pstmt, rs);
 		}
+	}
+
+	private List<Question> getResultForAll(ResultSet rs) throws SQLException {
+		List<Question> questions = new ArrayList<Question>();
+		Question question = null;
+		while (rs.next()) {
+			question = new Question(
+					rs.getLong("questionId"),
+					rs.getString("writer"),
+					rs.getString("title"),
+					null,
+					rs.getTimestamp("createdDate"),
+					rs.getInt("countOfComment"));
+			questions.add(question);
+		}
+		return questions;
+	}
+
+	private String setQueryForAll() {
+		String sql = "SELECT questionId, writer, title, createdDate, countOfComment FROM QUESTIONS " + 
+				"order by questionId desc";
+		return sql;
 	}
 
 	public Question findById(long questionId) throws SQLException {
@@ -97,28 +107,43 @@ public class QuestionDao {
 		ResultSet rs = null;
 		try {
 			con = ConnectionManager.getConnection();
-			String sql = "SELECT questionId, writer, title, contents, createdDate, countOfComment FROM QUESTIONS " + 
-					"WHERE questionId = ?";
+			String sql = setQueryForOne();
 			pstmt = con.prepareStatement(sql);
-			pstmt.setLong(1, questionId);
+			SetValueForOne(questionId, pstmt);
 
 			rs = pstmt.executeQuery();
 
-			Question question = null;
-			if (rs.next()) {
-				question = new Question(
-						rs.getLong("questionId"),
-						rs.getString("writer"),
-						rs.getString("title"),
-						rs.getString("contents"),
-						rs.getTimestamp("createdDate"),
-						rs.getInt("countOfComment"));
-			}
+			Question question = getResultForOne(rs);
 
 			return question;
 		} finally {
 			closeResource(con, pstmt, rs);
 		}
+	}
+
+	private void SetValueForOne(long questionId, PreparedStatement pstmt)
+			throws SQLException {
+		pstmt.setLong(1, questionId);
+	}
+
+	private Question getResultForOne(ResultSet rs) throws SQLException {
+		Question question = null;
+		if (rs.next()) {
+			question = new Question(
+					rs.getLong("questionId"),
+					rs.getString("writer"),
+					rs.getString("title"),
+					rs.getString("contents"),
+					rs.getTimestamp("createdDate"),
+					rs.getInt("countOfComment"));
+		}
+		return question;
+	}
+
+	private String setQueryForOne() {
+		String sql = "SELECT questionId, writer, title, contents, createdDate, countOfComment FROM QUESTIONS " + 
+				"WHERE questionId = ?";
+		return sql;
 	}
 
 	private void closeResource(Connection con, PreparedStatement pstmt,
