@@ -87,15 +87,7 @@ public class QuestionDao {
 
 			return questions;
 		} finally {
-			if (rs != null) {
-				rs.close();
-			}
-			if (pstmt != null) {
-				pstmt.close();
-			}
-			if (con != null) {
-				con.close();
-			}
+			closeResource(con, pstmt, rs);
 		}
 	}
 
@@ -125,15 +117,20 @@ public class QuestionDao {
 
 			return question;
 		} finally {
-			if (rs != null) {
-				rs.close();
-			}
-			if (pstmt != null) {
-				pstmt.close();
-			}
-			if (con != null) {
-				con.close();
-			}
+			closeResource(con, pstmt, rs);
+		}
+	}
+
+	private void closeResource(Connection con, PreparedStatement pstmt,
+			ResultSet rs) throws SQLException {
+		if (rs != null) {
+			rs.close();
+		}
+		if (pstmt != null) {
+			pstmt.close();
+		}
+		if (con != null) {
+			con.close();
 		}
 	}
 }
